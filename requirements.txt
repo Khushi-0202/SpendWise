@@ -1,0 +1,19 @@
+# SpendWise - Interactive Expense Tracker
+# ==============================================================================
+# This project is a 100% pure client-side web application built with:
+#   - HTML5
+#   - CSS3 (Vanilla CSS Design System & Glassmorphism)
+#   - Modern JavaScript (ES6+ Vanilla JS, zero runtime frameworks)
+#
+# No backend dependencies or Python packages are required to run this application!
+# You can run it simply by opening `index.html` in any web browser.
+#
+# ------------------------------------------------------------------------------
+# Optional Local Development (Python):
+# ------------------------------------------------------------------------------
+# To run a local static server with Python's built-in module:
+#   python -m http.server 8000
+#
+# If you prefer an automatic live-reloading server during development,
+# you may optionally install:
+livereload>=2.6.3

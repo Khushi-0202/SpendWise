@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="A sleek, interactive expense tracker web application with real-time input validation, category insights, and local data persistence.">
+  <title>SpendWise &bull; Modern Interactive Expense Tracker</title>
+
+  <!-- Modern Typography from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap"
+    rel="stylesheet">
+
+  <!-- Indian Rupee Favicon -->
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text y='19' font-size='20' font-weight='bold' fill='%236366f1'>₹</text></svg>">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- Header / Navigation Bar -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-icon" aria-label="Indian Rupee Currency Icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.3"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 3h12M6 8h11M6 13h3a4.5 4.5 0 0 0 0-9H6M9 13l7.5 8" />
+          </svg>
+        </div>
+        <div class="brand-info">
+          <h1 class="brand-title">SpendWise</h1>
+          <span class="brand-badge">India &bull; ₹ Tracker</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Currency Selector (India INR Only) -->
+        <div class="currency-wrapper" title="Currency: Indian Rupee (₹)">
+          <label for="currency-select" class="visually-hidden">Currency</label>
+          <select id="currency-select" class="currency-select" aria-label="Currency Selector">
+            <option value="₹" selected>🇮🇳 INR (₹)</option>
+          </select>
+        </div>
+
+        <!-- User Instructions / Guide Button -->
+        <button id="btn-open-guide" class="btn-icon guide-btn" type="button" aria-label="Open User Instructions Guide"
+          title="How to Use Guide">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="16" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12.01" y2="8" />
+          </svg>
+        </button>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" class="btn-icon theme-btn" type="button" aria-label="Toggle Dark / Light Theme"
+          title="Toggle theme">
+          <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4" />
+            <path
+              d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+          </svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Top Summary Dashboard Cards -->
+    <section class="summary-grid" aria-label="Financial Summary Cards">
+      <!-- Balance Card -->
+      <article class="summary-card balance-card">
+        <div class="card-header">
+          <span class="card-label">Total Balance</span>
+          <div class="card-icon-pill balance-pill">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="3" />
+              <line x1="2" y1="10" x2="22" y2="10" />
+            </svg>
+          </div>
+        </div>
+        <div class="card-value balance-value" id="total-balance">₹0.00</div>
+        <div class="card-footer">
+          <span class="status-indicator" id="balance-status">Healthy Surplus</span>
+          <span class="text-subtle" id="tx-count-label">0 transactions</span>
+        </div>
+      </article>
+
+      <!-- Income Card -->
+      <article class="summary-card income-card">
+        <div class="card-header">
+          <span class="card-label">Total Income</span>
+          <div class="card-icon-pill income-pill">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="19" x2="12" y2="5" />
+              <polyline points="5 12 12 5 19 12" />
+            </svg>
+          </div>
+        </div>
+        <div class="card-value income-value" id="total-income">+₹0.00</div>
+        <div class="card-footer">
+          <span class="trend-badge positive">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="18 15 12 9 6 15" />
+            </svg>
+            Inflow
+          </span>
+          <span class="text-subtle" id="income-count-label">0 sources</span>
+        </div>
+      </article>
+
+      <!-- Expense Card -->
+      <article class="summary-card expense-card">
+        <div class="card-header">
+          <span class="card-label">Total Expenses</span>
+          <div class="card-icon-pill expense-pill">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <polyline points="19 12 12 19 5 12" />
+            </svg>
+          </div>
+        </div>
+        <div class="card-value expense-value" id="total-expense">-₹0.00</div>
+        <div class="card-footer">
+          <span class="trend-badge negative">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+            Outflow
+          </span>
+          <span class="text-subtle" id="expense-count-label">0 items</span>
+        </div>
+      </article>
+
+      <!-- Savings / Budget Ratio Card -->
+      <article class="summary-card ratio-card">
+        <div class="card-header">
+          <span class="card-label">Savings Rate</span>
+          <div class="card-icon-pill ratio-pill">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+              <path d="M22 12A10 10 0 0 0 12 2v10z" />
+            </svg>
+          </div>
+        </div>
+        <div class="card-value ratio-value" id="savings-rate">0%</div>
+        <div class="card-footer">
+          <div class="progress-bar-bg" title="Savings percentage of income">
+            <div class="progress-bar-fill" id="savings-progress" style="width: 0%;"></div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- Main Workspace Layout -->
+    <main class="main-layout">
+      <!-- Left Column: Add Transaction Form & Visual Analytics -->
+      <section class="left-panel">
+
+        <!-- Add Transaction Card with Input Validation -->
+        <div class="card form-card">
+          <div class="card-heading">
+            <div class="heading-with-icon">
+              <span class="section-bullet"></span>
+              <h2>Add Transaction</h2>
+            </div>
+            <span class="hint-pill">Interactive Form</span>
+          </div>
+
+          <form id="transaction-form" novalidate>
+            <!-- Transaction Type Switcher (Segmented Control) -->
+            <div class="form-group">
+              <label class="field-label">Transaction Type</label>
+              <div class="type-segmented-control" role="radiogroup" aria-label="Transaction Type Selection">
+                <input type="radio" id="type-expense" name="type" value="expense" checked>
+                <label for="type-expense" class="segment-label segment-expense">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <polyline points="19 12 12 19 5 12" />
+                  </svg>
+                  Expense
+                </label>
+
+                <input type="radio" id="type-income" name="type" value="income">
+                <label for="type-income" class="segment-label segment-income">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="12" y1="19" x2="12" y2="5" />
+                    <polyline points="5 12 12 5 19 12" />
+                  </svg>
+                  Income
+                </label>
+              </div>
+            </div>
+
+            <!-- Description Input with Validation -->
+            <div class="form-group field-wrapper" id="desc-wrapper">
+              <div class="label-row">
+                <label for="tx-description" class="field-label">Description <span class="required">*</span></label>
+                <span class="char-counter" id="desc-char-counter">0/40</span>
+              </div>
+              <div class="input-with-icon">
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                  </svg>
+                </span>
+                <input type="text" id="tx-description" name="description"
+                  placeholder="e.g. Grocery store, Salary, Coffee" required minlength="2" maxlength="40"
+                  autocomplete="off" aria-describedby="desc-error">
+                <span class="validation-status-icon" aria-hidden="true"></span>
+              </div>
+              <p class="error-msg" id="desc-error" role="alert">Please enter at least 2 characters (letters/words).</p>
+            </div>
+
+            <!-- Amount Input with Quick Presets & Validation -->
+            <div class="form-group field-wrapper" id="amount-wrapper">
+              <div class="label-row">
+                <label for="tx-amount" class="field-label">Amount <span class="required">*</span></label>
+                <span class="field-hint">Must be greater than ₹0</span>
+              </div>
+              <div class="input-with-icon">
+                <span class="input-icon currency-prefix" id="amount-currency-symbol">₹</span>
+                <input type="number" id="tx-amount" name="amount" placeholder="0.00" required min="0.01" max="100000000"
+                  step="0.01" inputmode="decimal" aria-describedby="amount-error">
+                <span class="validation-status-icon" aria-hidden="true"></span>
+              </div>
+              <p class="error-msg" id="amount-error" role="alert">Enter a valid positive amount in ₹ (e.g. 500.00).</p>
+
+              <!-- Quick Increment Buttons (INR Presets) -->
+              <div class="quick-amounts" aria-label="Quick amount presets">
+                <button type="button" class="btn-chip" data-add="100">+₹100</button>
+                <button type="button" class="btn-chip" data-add="500">+₹500</button>
+                <button type="button" class="btn-chip" data-add="1000">+₹1,000</button>
+                <button type="button" class="btn-chip" data-add="2000">+₹2,000</button>
+                <button type="button" class="btn-chip" data-add="5000">+₹5,000</button>
+              </div>
+            </div>
+
+            <!-- Category & Date (Two Column Row) -->
+            <div class="form-row">
+              <!-- Category Selector -->
+              <div class="form-group field-wrapper" id="category-wrapper">
+                <label for="tx-category" class="field-label">Category <span class="required">*</span></label>
+                <div class="select-with-icon">
+                  <select id="tx-category" name="category" required aria-describedby="category-error">
+                    <option value="" disabled selected>Select category...</option>
+                    <!-- Dynamically populated or default options -->
+                  </select>
+                </div>
+                <p class="error-msg" id="category-error" role="alert">Please pick a category.</p>
+              </div>
+
+              <!-- Date Picker -->
+              <div class="form-group field-wrapper" id="date-wrapper">
+                <label for="tx-date" class="field-label">Date <span class="required">*</span></label>
+                <input type="date" id="tx-date" name="date" required aria-describedby="date-error">
+                <p class="error-msg" id="date-error" role="alert">Please select a valid date.</p>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="btn-submit-tx" class="btn btn-primary btn-submit">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              <span>Add Transaction</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Visual Analytics: Interactive Category Breakdown -->
+        <div class="card chart-card">
+          <div class="card-heading">
+            <div class="heading-with-icon">
+              <span class="section-bullet"></span>
+              <h2>Expense Breakdown</h2>
+            </div>
+            <span class="hint-pill" id="chart-total-label">By Category</span>
+          </div>
+
+          <div class="chart-content">
+            <!-- Custom Dynamic SVG Donut Chart -->
+            <div class="chart-visual">
+              <svg id="donut-svg" viewBox="0 0 160 160" width="140" height="140"
+                aria-label="Category distribution donut chart">
+                <!-- SVG paths injected dynamically -->
+                <circle cx="80" cy="80" r="60" fill="transparent" stroke="var(--border-subtle)" stroke-width="20" />
+              </svg>
+              <div class="donut-center-info">
+                <span class="donut-center-label">Top Expense</span>
+                <strong class="donut-center-value" id="top-category-name">-</strong>
+              </div>
+            </div>
+
+            <!-- Category legend list with mini progress bars -->
+            <div class="chart-legend" id="category-legend" role="list" aria-label="Category spending breakdown list">
+              <!-- Dynamically populated categories -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Column: Transactions History, Filters, Search & Tools -->
+      <section class="right-panel">
+        <div class="card history-card">
+          <!-- History Header with Toolbar -->
+          <div class="history-top">
+            <div class="card-heading">
+              <div class="heading-with-icon">
+                <span class="section-bullet"></span>
+                <h2>Recent Transactions</h2>
+              </div>
+              <span class="count-badge" id="filtered-count">0 items</span>
+            </div>
+
+            <div class="action-buttons-group">
+              <button type="button" id="btn-export-csv" class="btn-outline" title="Export transactions to CSV">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                <span>Export CSV</span>
+              </button>
+              <button type="button" id="btn-clear-all" class="btn-outline btn-danger-ghost"
+                title="Clear all transactions">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                </svg>
+                <span>Clear All</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Filter, Search, and Sort Controls -->
+          <div class="filter-controls-box">
+            <!-- Search Input -->
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
+                stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input type="text" id="search-input" placeholder="Search by description or category..."
+                aria-label="Search transactions" autocomplete="off">
+              <button type="button" id="btn-clear-search" class="btn-clear-search" aria-label="Clear search text"
+                hidden>&times;</button>
+            </div>
+
+            <!-- Filter Pills & Sorting in one responsive row -->
+            <div class="filter-row">
+              <div class="filter-pills" role="radiogroup" aria-label="Filter transactions by type">
+                <button type="button" class="pill-btn active" data-filter="all">All</button>
+                <button type="button" class="pill-btn" data-filter="expense">Expenses</button>
+                <button type="button" class="pill-btn" data-filter="income">Income</button>
+              </div>
+
+              <div class="sort-wrapper">
+                <label for="sort-select" class="visually-hidden">Sort transactions</label>
+                <select id="sort-select" class="sort-select" aria-label="Sort transactions">
+                  <option value="date-desc">Newest First</option>
+                  <option value="date-asc">Oldest First</option>
+                  <option value="amount-desc">Highest Amount</option>
+                  <option value="amount-asc">Lowest Amount</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Transaction List Container -->
+          <div class="tx-list-container" tabindex="0" aria-label="Transaction records list">
+            <ul id="transaction-list" class="transaction-list">
+              <!-- Transaction list items injected via JS -->
+            </ul>
+
+            <!-- Empty State Display -->
+            <div id="empty-state" class="empty-state" hidden>
+              <div class="empty-icon-wrap">
+                <svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                  <polyline points="10 9 9 9 8 9" />
+                </svg>
+              </div>
+              <h3 class="empty-title">No transactions recorded</h3>
+              <p class="empty-subtitle" id="empty-subtitle">Your expense tracker is ready! Add your first income or
+                expense using the form on the left.</p>
+              <button type="button" id="btn-open-guide-empty" class="btn-sample-data">
+                📖 How to Use This App
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Instructions & Welcome Guide Dialog -->
+    <dialog id="instructions-modal" class="instruction-dialog">
+      <div class="instruction-body">
+        <div class="instruction-header">
+          <div class="guide-icon-pill">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.3"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+          </div>
+          <div class="guide-title-wrap">
+            <h3 class="guide-title">How to Use SpendWise</h3>
+            <span class="guide-subtitle">Quick guide to managing your expenses in ₹</span>
+          </div>
+          <button type="button" id="btn-close-guide" class="guide-close-btn" aria-label="Close guide">&times;</button>
+        </div>
+
+        <div class="instruction-steps">
+          <div class="step-card">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>Choose Transaction Type</h4>
+              <p>Toggle between <strong>Expense</strong> (spending out) or <strong>Income</strong> (money earned).
+                Categories will automatically adjust.</p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>Enter Details & Amount</h4>
+              <p>Type a description (e.g. <em>Groceries</em>, <em>Monthly Salary</em>), amount in <strong>₹</strong> (or
+                click quick chips like <em>+₹500</em>), select category and date.</p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4>Input Validation & Live Save</h4>
+              <p>Click <strong>Add Transaction</strong>. Built-in input validation prevents errors. Your total balance
+                and visual chart update immediately.</p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <h4>Track, Filter & Export</h4>
+              <p>Use search and filter pills (<em>Expenses</em>, <em>Income</em>), check the interactive <strong>Donut
+                  Chart</strong>, or export everything to <strong>CSV</strong>.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="instruction-footer">
+          <label class="guide-checkbox-wrap">
+            <input type="checkbox" id="chk-dont-show-guide">
+            <span>Don't show this again</span>
+          </label>
+          <button type="button" id="btn-got-it" class="btn btn-primary btn-got-it">
+            Got it, Let's Start! &rarr;
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Native Confirmation Dialog for Clear All -->
+    <dialog id="confirm-modal" class="confirm-dialog">
+      <div class="dialog-body">
+        <div class="dialog-icon-wrap warning">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+        </div>
+        <h3 class="dialog-title">Clear all transactions?</h3>
+        <p class="dialog-desc">This action will delete all recorded expenses and income from your browser's storage. You
+          cannot undo this action.</p>
+        <div class="dialog-actions">
+          <button type="button" id="btn-cancel-modal" class="btn btn-secondary">Cancel</button>
+          <button type="button" id="btn-confirm-clear" class="btn btn-danger">Yes, Clear All</button>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>SpendWise &bull; Built with HTML5, CSS3 &amp; Vanilla JavaScript &bull; Data saved locally in your browser</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

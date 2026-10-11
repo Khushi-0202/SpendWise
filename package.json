@@ -1,0 +1,29 @@
+{
+  "name": "spendwise-expense-tracker",
+  "version": "1.0.0",
+  "description": "SpendWise - Modern Interactive Expense Tracker built with pure HTML5, CSS3, and Vanilla JavaScript with Indian Rupee (INR) support, dynamic analytics, and local persistence.",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve ."
+  },
+  "keywords": [
+    "expense-tracker",
+    "personal-finance",
+    "budget-tracker",
+    "vanilla-js",
+    "html5",
+    "css3",
+    "inr-tracker",
+    "glassmorphism",
+    "localstorage",
+    "data-visualization",
+    "interactive-dashboard"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  }
+}
